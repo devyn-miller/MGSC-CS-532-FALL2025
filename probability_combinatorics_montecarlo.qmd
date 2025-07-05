@@ -12,7 +12,7 @@ format:
     code-tools: true
     width: 1280
     height: 720
-    fontsize: 24px
+    fontsize: 28px  # Increased font size
     code-block-background: true
     code-overflow: wrap
 execute:
@@ -81,6 +81,7 @@ array([ 2,  4,  6,  8, 10])
 
 ::: {.notes}
 Numpy is crucial for computational economics because:
+
 1. Economics often deals with large datasets
 2. Matrix operations appear in many economic models
 3. Vectorization makes code faster and clearer
@@ -192,6 +193,7 @@ Question for students: Can you think of economic scenarios where we'd need to pe
 $P(x)=\frac{\text{count of desired outcomes}}{\text{count of all possible outcomes}}$
 
 **Properties:**
+
 - $0 \leq P(x) \leq 1$
 - $P(\text{certain event}) = 1$
 - $P(\text{impossible event}) = 0$
@@ -199,6 +201,7 @@ $P(x)=\frac{\text{count of desired outcomes}}{\text{count of all possible outcom
 
 ::: {.column width="40%"}
 **Economic examples:**
+
 - Default probability
 - Market crash likelihood  
 - Investment outcomes
@@ -240,6 +243,7 @@ Out of 1000 tosses: 511 heads and 489 tails
 This is a simple but powerful example of using simulation to understand probability.
 
 Discussion points:
+
 1. Law of large numbers - as trials increase, the proportion approaches the true probability
 2. Randomness means we don't get exactly 500/500
 3. Each time we run this, we'll get different results
@@ -383,20 +387,23 @@ Ask students: When would events in economics NOT be independent?
 > The mathematical study of counting arrangements and selections
 
 :::: {.columns}
-::: {.column width="60%"}
+::: {.column width="50%"}
 **Key Questions:**
+
 1. Does **order** matter?
 2. Is **replacement** allowed?
 
 **Economic Applications:**
+
 - Market entry/exit combinations
 - Asset allocation strategies
 - Trading sequence evaluation
 - Game theory outcomes
 :::
 
-::: {.column width="40%"}
+::: {.column width="50%"}
 **The Big Four:**
+
 1. Permutation with replacement
 2. Permutation without replacement
 3. Combination without replacement
@@ -414,23 +421,9 @@ Ask students: Can you think of an economic scenario where the order matters? Wha
 
 ## Combinatorics Summary
 
-```{mermaid}
-graph TD
-    A[Combinatorial Problem] --> B{Order Matters?}
-    B -->|Yes| C{Replacement Allowed?}
-    B -->|No| D{Replacement Allowed?}
-    
-    C -->|Yes| E[Permutation with Replacement<br>n^k]
-    C -->|No| F[Permutation without Replacement<br>n!/(n-k)!]
-    
-    D -->|Yes| G[Combination with Replacement<br>(n+k-1)!/(k!(n-1)!)]
-    D -->|No| H[Combination without Replacement<br>n!/(k!(n-k)!)]
-    
-    style E fill:#d4f1f9,stroke:#333
-    style F fill:#d4f1f9,stroke:#333  
-    style G fill:#d4f1f9,stroke:#333
-    style H fill:#d4f1f9,stroke:#333
-```
+<div style="text-align:center;">
+![Combinatorial Problem Diagram](probability_combinatorics_montecarlo_files/combinatoral-problem.png){width=50%}
+</div>
 
 ## Permutations with Replacement
 
@@ -441,10 +434,12 @@ When **order matters** and **repetition is allowed**:
 $n^k$ possible outcomes
 
 where:
+
 - $n$ = number of choices per position
 - $k$ = number of positions
 
 **Example:** 
+
 - 4-digit PIN using digits 0-9
 - $10^4 = 10,000$ possibilities
 :::
@@ -495,6 +490,7 @@ When **order matters** and **no repetition**:
 $\frac{n!}{(n-k)!}$ arrangements
 
 **Example:** 
+
 - Ranking top 3 from 8 candidates
 - $\frac{8!}{5!} = 8 \cdot 7 \cdot 6 = 336$ possibilities
 :::
@@ -523,6 +519,7 @@ Number of permutations: 336
 
 ::: {.notes}
 This applies to many economic scenarios:
+
 - Ranking preferences
 - Order of entering markets
 - Executive succession planning
@@ -539,6 +536,7 @@ When **order doesn't matter** and **no repetition**:
 $\binom{n}{k} = \frac{n!}{k!(n-k)!}$
 
 **Example:**
+
 - Selecting 3 projects from 8 options
 - $\binom{8}{3} = \frac{8!}{3!5!} = 56$ possibilities
 :::
@@ -566,6 +564,7 @@ Using scipy: 56
 
 ::: {.notes}
 This is perhaps the most common scenario in economics:
+
 - Portfolio selection (which assets to include)
 - Committee formation
 - Market entry decisions (which markets to enter)
@@ -582,6 +581,7 @@ When **order doesn't matter** and **repetition is allowed**:
 $\binom{n+k-1}{k} = \frac{(n+k-1)!}{k!(n-1)!}$
 
 **Example:** 
+
 - Ice cream: 5 flavors, 3 scoops
 - $\binom{5+3-1}{3} = \binom{7}{3} = 35$ possibilities
 :::
@@ -604,6 +604,7 @@ Combinations with replacement: 35
 
 ::: {.notes}
 This applies to economic scenarios where:
+
 - Resources can be allocated in any proportion
 - Multiple investments can be made in the same asset
 - Budget allocation across categories
@@ -650,19 +651,21 @@ Ask students: How would the calculation change if order did matter? (Ans: 5³ = 
 ## What is Monte Carlo?
 
 :::: {.columns}
-::: {.column width="60%"}
+::: {.column width="50%"}
 **Core concept:** 
 Use random sampling to solve problems
 
 **Key steps:**
+
 1. Define domain of inputs
 2. Generate random inputs
 3. Perform deterministic computation
 4. Aggregate results
 :::
 
-::: {.column width="40%"}
+::: {.column width="50%"}
 **Economic applications:**
+
 - Risk assessment
 - Option pricing
 - Forecasting
@@ -675,6 +678,7 @@ Use random sampling to solve problems
 Monte Carlo methods are named after the famous casino in Monaco, reflecting their basis in randomness and probability.
 
 They're extremely powerful in economics because they let us:
+
 1. Model complex systems with many variables
 2. Account for uncertainty
 3. Estimate probabilities of complex events
@@ -685,21 +689,9 @@ Ask students: What kinds of economic problems might be too complex for analytica
 
 ## Monte Carlo Process
 
-```{mermaid}
-flowchart TD
-    A[Define Problem Domain] -->|Identify parameters| B(Generate Random Inputs)
-    B -->|Sampling from distributions| C(Run Deterministic Calculation)
-    C --> D{Sufficient\nSamples?}
-    D -->|No| B
-    D -->|Yes| E(Aggregate Results)
-    E -->|Statistics, visualization| F[Draw Conclusions]
-    
-    style A fill:#f9d4d4,stroke:#333
-    style B fill:#d4f1f9,stroke:#333
-    style C fill:#d4f1f9,stroke:#333
-    style E fill:#d4f9d4,stroke:#333
-    style F fill:#f9d4d4,stroke:#333
-```
+<div style="text-align:center;">
+  ![](probability_combinatorics_montecarlo_files/monte-carlo.png){width=20%}
+</div>
 
 ## Classic Example: Estimating π
 
@@ -744,6 +736,7 @@ True π: 3.141592653589793
 This is a classic example that shows the power of Monte Carlo methods.
 
 The principle applies to many economic problems:
+
 - Area under a complex demand curve
 - Expected value of a complex asset price distribution
 - Probability of complex market events
@@ -764,24 +757,37 @@ x = np.random.random(points)
 y = np.random.random(points)
 inside = (x**2 + y**2) <= 1
 
-# Plotting
+# Calculate π estimate
+pi_estimate = 4 * np.sum(inside) / points
+```
+
+---
+
+## Visualizing π Estimation – Plot
+
+```{python}
+# Plotting the Monte Carlo points
 plt.figure(figsize=(5, 5))
-plt.scatter(x[inside], y[inside], s=1, color='blue')
-plt.scatter(x[~inside], y[~inside], s=1, color='red')
+plt.scatter(x[inside], y[inside], s=1, color='blue', label='Inside')
+plt.scatter(x[~inside], y[~inside], s=1, color='red', label='Outside')
 plt.axis('equal')
+
+# Draw unit quarter-circle for context
 circle = plt.Circle((0, 0), 1, fill=False, color='black')
 plt.gca().add_patch(circle)
 plt.xlim(0, 1)
 plt.ylim(0, 1)
 
-# Calculate pi
-pi_estimate = 4 * np.sum(inside) / points
-plt.title(f"π estimate: {pi_estimate:.4f}")
+# Annotate with π estimate
+plt.title(f"Monte Carlo Estimate of π: {pi_estimate:.4f}")
+plt.tight_layout()
 plt.show()
 ```
 
+
 ::: {.notes}
 The visualization helps understand what's happening:
+
 - Blue points are inside the circle (x² + y² ≤ 1)
 - Red points are outside
 - The ratio of blue points to total points is approximately π/4
@@ -796,12 +802,14 @@ Ask students: Can you think of other geometric problems we could solve with this
 :::: {.columns}
 ::: {.column width="50%"}
 **Problem:**
+
 - Start with $6
 - Goal: Double your money to $12
 - Each bet: lose $1 or win $2
 - Win if die roll > 3
 
 **Questions:**
+
 - What's the probability of reaching $12?
 - How many bets on average?
 :::
@@ -835,6 +843,7 @@ target_money = 12
 This is a classic probability problem that's difficult to solve analytically but perfect for Monte Carlo.
 
 It models many economic scenarios:
+
 - Investment strategies with fixed targets
 - Trading with limited capital
 - Risk of bankruptcy
@@ -869,10 +878,12 @@ Average number of bets: 36.2
 
 ::: {.notes}
 The results show:
+
 1. About a 50% chance of success
 2. It takes about 36 bets on average
 
 This is despite having a positive expected value per bet:
+
 - With probability 1/2, win $1
 - With probability 1/2, lose $1
 - Expected value per bet: 0.5 × $1 + 0.5 × (-$1) = $0
@@ -882,49 +893,66 @@ The possibility of going broke before reaching the target makes a huge differenc
 Ask students: How would this change if we started with $3 instead of $6?
 :::
 
-## Distribution of Results
+## Distribution of Results – Simulation
 
 ```{python}
 import random
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Simulation logic
 def gamblers_ruin(initial_money, target_money):
-  current_money = initial_money
-  bets = 0
-  while current_money > 0 and current_money < target_money:
-    current_money -= 1
-    bets += 1
-    die = random.randint(1,6)
-    if die > 3:
-      current_money += 2
-  return current_money, bets
+    current_money = initial_money
+    bets = 0
+    while current_money > 0 and current_money < target_money:
+        current_money -= 1
+        bets += 1
+        die = random.randint(1, 6)
+        if die > 3:
+            current_money += 2
+    return current_money, bets
 
+# Run simulations
 initial_money = 6
 target_money = 12
 num_simulations = 10000
 np.random.seed(42)
 random.seed(42)
-results = [gamblers_ruin(initial_money, target_money) 
-           for _ in range(num_simulations)]
+results = [gamblers_ruin(initial_money, target_money) for _ in range(num_simulations)]
 
-# Plot histogram of number of bets
-plt.figure(figsize=(10, 4))
-plt.subplot(1, 2, 1)
-plt.hist([r[1] for r in results], bins=30, color='skyblue')
+# Extract for plotting
+bets = [r[1] for r in results]
+finals = [r[0] for r in results]
+```
+
+---
+
+## Distribution of Results – Number of Bets
+
+```{python}
+plt.figure(figsize=(6, 4))
+plt.hist(bets, bins=30, color='skyblue', edgecolor='black')
 plt.title('Number of Bets')
 plt.xlabel('Bets')
 plt.ylabel('Frequency')
+plt.tight_layout()
+plt.show()
+```
 
-# Plot histogram of final money
-plt.subplot(1, 2, 2)
-plt.hist([r[0] for r in results], bins=[0,1,12], color='lightgreen')
+---
+
+## Distribution of Results – Final Money
+
+```{python}
+plt.figure(figsize=(6, 4))
+plt.hist(finals, bins=[0, 1, 12], color='lightgreen', edgecolor='black', rwidth=0.9)
 plt.title('Final Money')
 plt.xlabel('Money')
 plt.ylabel('Frequency')
 plt.tight_layout()
 plt.show()
 ```
+
 
 ::: {.notes}
 The histograms reveal:
@@ -1000,10 +1028,12 @@ print(f"95% weekly VaR: ${VaR:.2f}")
 These are just two of many applications in economics and finance:
 
 Option Pricing:
+
 - The Black-Scholes model provides an analytical solution for simple options
 - Monte Carlo is essential for path-dependent or exotic options
 
 Risk Assessment:
+
 - Value at Risk (VaR) is a key risk measure in financial institutions
 - Monte Carlo allows us to estimate VaR for complex portfolios
 
@@ -1015,6 +1045,7 @@ Ask students: What other economic problems might benefit from Monte Carlo method
 :::: {.columns}
 ::: {.column width="50%"}
 **Core concepts:**
+
 - Numpy provides efficient computation
 - Probability is the foundation of uncertainty
 - Combinatorics helps us count outcomes
@@ -1023,6 +1054,7 @@ Ask students: What other economic problems might benefit from Monte Carlo method
 
 ::: {.column width="50%"}
 **Economic value:**
+
 - Model complex systems
 - Incorporate uncertainty
 - Estimate distributions
@@ -1037,6 +1069,7 @@ Ask students: What other economic problems might benefit from Monte Carlo method
 These computational tools form the foundation for modern quantitative economics.
 
 They allow us to:
+
 1. Move beyond simplified analytical models
 2. Incorporate more realistic assumptions
 3. Handle uncertainty explicitly
