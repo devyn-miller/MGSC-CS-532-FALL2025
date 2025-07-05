@@ -472,7 +472,7 @@ lin: [0.   0.25 0.5  0.75 1.  ]</code></pre>
 <p>If not mutually exclusive: <span class="math inline">\(P(A \cup B) = P(A) + P(B) - P(A \cap B)\)</span></p>
 <p><strong>Example:</strong> Rolling a die - P(roll 1 OR 3) = 1/6 + 1/6 = 2/6 - P(roll even OR divisible by 3) = ?</p>
 </div><div class="column" style="width:30%;">
-<div id="84b7bdd1" class="cell" data-fig-height="4" data-fig-width="4" data-execution_count="1">
+<div id="3a872be4" class="cell" data-fig-height="4" data-fig-width="4" data-execution_count="1">
 <div class="cell-output cell-output-display">
 <div>
 <figure>
@@ -517,7 +517,7 @@ lin: [0.   0.25 0.5  0.75 1.  ]</code></pre>
 <p>For <strong>independent</strong> events: <span class="math inline">\(P(A \cap B) = P(A) \cdot P(B)\)</span></p>
 <p><strong>Example:</strong> Drawing cards - P(red card) = 26/52 = 1/2 - P(king) = 4/52 = 1/13 - P(red king) = ?</p>
 </div><div class="column" style="width:30%;">
-<div id="3b82937c" class="cell" data-fig-height="4" data-fig-width="4" data-execution_count="2">
+<div id="9a00a020" class="cell" data-fig-height="4" data-fig-width="4" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <div>
 <figure>
@@ -951,7 +951,7 @@ True π: 3.141592653589793</code></pre>
 </section>
 <section id="visualizing-π-estimation" class="slide level2">
 <h2>Visualizing π Estimation</h2>
-<div id="2e8ad2b3" class="cell" data-execution_count="3">
+<div id="7548192e" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href=""></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb27-2"><a href=""></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb27-3"><a href=""></a></span>
@@ -968,7 +968,7 @@ True π: 3.141592653589793</code></pre>
 </section>
 <section id="visualizing-π-estimation-plot" class="slide level2">
 <h2>Visualizing π Estimation – Plot</h2>
-<div id="0ac033ee" class="cell" data-execution_count="4">
+<div id="af24ddca" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href=""></a><span class="co"># Plotting the Monte Carlo points</span></span>
 <span id="cb28-2"><a href=""></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
 <span id="cb28-3"><a href=""></a>plt.scatter(x[inside], y[inside], s<span class="op">=</span><span class="dv">1</span>, color<span class="op">=</span><span class="st">'blue'</span>, label<span class="op">=</span><span class="st">'Inside'</span>)</span>
@@ -1113,7 +1113,7 @@ Average number of bets: 36.2</code></pre>
 </section>
 <section id="distribution-of-results-simulation" class="slide level2">
 <h2>Distribution of Results – Simulation</h2>
-<div id="b311cdfc" class="cell" data-execution_count="5">
+<div id="56d7de1b" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href=""></a><span class="im">import</span> random</span>
 <span id="cb32-2"><a href=""></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb32-3"><a href=""></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -1145,7 +1145,7 @@ Average number of bets: 36.2</code></pre>
 </section>
 <section id="distribution-of-results-number-of-bets" class="slide level2">
 <h2>Distribution of Results – Number of Bets</h2>
-<div id="6e8eeffe" class="cell" data-execution_count="6">
+<div id="1b356671" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href=""></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
 <span id="cb33-2"><a href=""></a>plt.hist(bets, bins<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">'skyblue'</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>)</span>
 <span id="cb33-3"><a href=""></a>plt.title(<span class="st">'Number of Bets'</span>)</span>
@@ -1158,7 +1158,7 @@ Average number of bets: 36.2</code></pre>
 <img data-src="probability_combinatorics_montecarlo_files/figure-revealjs/cell-7-output-1.png" class="r-stretch"></section>
 <section id="distribution-of-results-final-money" class="slide level2">
 <h2>Distribution of Results – Final Money</h2>
-<div id="08a28217" class="cell" data-execution_count="7">
+<div id="badc861d" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href=""></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
 <span id="cb34-2"><a href=""></a>plt.hist(finals, bins<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">12</span>], color<span class="op">=</span><span class="st">'lightgreen'</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>, rwidth<span class="op">=</span><span class="fl">0.9</span>)</span>
 <span id="cb34-3"><a href=""></a>plt.title(<span class="st">'Final Money'</span>)</span>

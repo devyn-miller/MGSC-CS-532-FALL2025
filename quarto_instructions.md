@@ -122,4 +122,4 @@ quarto render your_presentation.qmd --to pdf
 
 - [Quarto Documentation](https://quarto.org/docs/guide/)
 - [Quarto Presentations Guide](https://quarto.org/docs/presentations/)
-- [RevealJS Options](https://quarto.org/docs/presentations/revealjs/)
+- [RevealJS Options](https://quarto.org/docs/presentations/revealjs/) 
