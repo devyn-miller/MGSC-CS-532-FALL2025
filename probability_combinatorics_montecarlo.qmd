@@ -1,0 +1,1048 @@
+---
+title: "Probability, Combinatorics, Numpy & Monte Carlo"
+subtitle: "Essential Computational Tools for Economists"
+author: "Computational Economics"
+format: 
+  revealjs:
+    theme: simple
+    transition: slide
+    slide-number: true
+    code-fold: false
+    code-line-numbers: true
+    code-tools: true
+    width: 1280
+    height: 720
+    fontsize: 24px
+    code-block-background: true
+    code-overflow: wrap
+execute:
+  echo: true
+---
+
+## What We'll Cover Today
+
+:::: {.columns}
+::: {.column width="50%"}
+- Numpy essentials
+  - Arrays & vectorization
+  - Random number generation
+- Probability basics
+  - Definitions & properties
+  - Simple simulations
+:::
+
+::: {.column width="50%"}
+- Combinatorics
+  - Counting principles
+  - Permutations
+  - Combinations
+- Monte Carlo methods
+  - Random sampling
+  - Estimation
+  - Applications
+:::
+::::
+
+::: {.notes}
+Welcome everyone! Today we're exploring fundamental computational tools that economists use for modeling uncertain scenarios and optimization problems.
+
+These concepts form the foundation for more advanced topics like risk assessment, option pricing, and game theory.
+:::
+
+# Numpy Essentials
+
+## Why Numpy?
+
+:::: {.columns}
+::: {.column width="60%"}
+- **Fast** matrix operations
+- **Efficient** memory usage
+- **Vectorized** calculations
+- Foundation for **scientific computing**
+- Essential for **economic modeling**
+:::
+
+::: {.column width="40%"}
+```python
+import numpy as np
+
+# Create array
+a = np.array([1, 2, 3, 4, 5])
+
+# Vectorized operation (5x faster!)
+a * 2
+```
+
+```
+array([ 2,  4,  6,  8, 10])
+```
+:::
+::::
+
+::: {.notes}
+Numpy is crucial for computational economics because:
+1. Economics often deals with large datasets
+2. Matrix operations appear in many economic models
+3. Vectorization makes code faster and clearer
+4. It's the foundation for pandas, scipy, and other tools
+
+Ask students: Who has used Numpy before? What for?
+:::
+
+## Creating Arrays
+
+```python
+import numpy as np
+
+# From lists
+a = np.array([1, 2, 3, 4])
+
+# Fixed values
+zeros = np.zeros(5)
+ones = np.ones((2, 3))
+full = np.full((2, 2), 7)
+
+# Sequences
+seq = np.arange(10)  # 0 to 9
+lin = np.linspace(0, 1, 5)  # 5 evenly spaced values
+```
+
+```
+zeros: [0. 0. 0. 0. 0.]
+ones: [[1. 1. 1.]
+       [1. 1. 1.]]
+seq: [0 1 2 3 4 5 6 7 8 9]
+lin: [0.   0.25 0.5  0.75 1.  ]
+```
+
+## Random Numbers in Numpy
+
+```python
+# Random from uniform distribution [0,1)
+random_uniform = np.random.random(5)
+
+# Random integers (like dice rolls)
+dice_rolls = np.random.randint(1, 7, size=10)
+
+# Random from normal distribution
+normal_samples = np.random.normal(loc=0, scale=1, size=5)
+
+# Setting the seed for reproducibility
+np.random.seed(42)
+```
+
+::: {.notes}
+Random number generation is essential for:
+- Simulating economic scenarios
+- Bootstrapping for inference
+- Monte Carlo integration
+- Agent-based modeling
+
+Ask students: Why is setting the seed important in research?
+:::
+
+## Vectorized Operations
+
+:::: {.columns}
+::: {.column width="50%"}
+**Non-vectorized (slow):**
+```python
+# Calculate returns on 1000 assets
+returns = []
+for i in range(1000):
+    returns.append(
+        prices[i+1] / prices[i] - 1
+    )
+```
+:::
+
+::: {.column width="50%"}
+**Vectorized (fast):**
+```python
+# Calculate all returns at once
+prices = np.array([100, 102, 104, 103, 105])
+returns = prices[1:] / prices[:-1] - 1
+```
+
+```
+array([0.02, 0.01960784, -0.00961538, 0.01941748])
+```
+:::
+::::
+
+::: {.notes}
+Vectorization is critical for performance. This makes a huge difference when:
+- Analyzing large economic datasets
+- Running many simulations
+- Implementing computationally intensive models
+
+Question for students: Can you think of economic scenarios where we'd need to perform the same calculation on many values?
+:::
+
+# Probability Basics
+
+## What is Probability?
+
+> Probability measures how likely events are to occur
+
+:::: {.columns}
+::: {.column width="60%"}
+**Formal definition:**
+
+$P(x)=\frac{\text{count of desired outcomes}}{\text{count of all possible outcomes}}$
+
+**Properties:**
+- $0 \leq P(x) \leq 1$
+- $P(\text{certain event}) = 1$
+- $P(\text{impossible event}) = 0$
+:::
+
+::: {.column width="40%"}
+**Economic examples:**
+- Default probability
+- Market crash likelihood  
+- Investment outcomes
+- Auction win probability
+:::
+::::
+
+::: {.notes}
+Probability is fundamental to economics because most economic decisions involve uncertainty.
+
+Example: An investor doesn't know with certainty what return they'll earn, but they can assign probabilities to different outcomes.
+
+Ask students: What economic decisions have you made where you had to consider probabilities?
+:::
+
+## Simulating Probability: Coin Flips
+
+```python
+import random
+
+def coinFlip(trials):
+    heads, tails = 0, 0
+    for i in range(trials):
+        r = random.randint(0, 1)
+        heads += r
+        tails += 1 - r
+    return [heads, tails]
+
+trials = 1000
+[h, t] = coinFlip(trials)
+print(f"Out of {trials} tosses: {h} heads and {t} tails")
+```
+
+```
+Out of 1000 tosses: 511 heads and 489 tails
+```
+
+::: {.notes}
+This is a simple but powerful example of using simulation to understand probability.
+
+Discussion points:
+1. Law of large numbers - as trials increase, the proportion approaches the true probability
+2. Randomness means we don't get exactly 500/500
+3. Each time we run this, we'll get different results
+
+Ask students: What if we increase trials to 10,000? 100,000? What would you expect?
+:::
+
+## Union of Events (OR)
+
+:::: {.columns}
+::: {.column width="40%"}
+If A and B are **mutually exclusive**:
+$P(A \cup B) = P(A) + P(B)$
+
+If not mutually exclusive:
+$P(A \cup B) = P(A) + P(B) - P(A \cap B)$
+
+**Example:** Rolling a die
+- P(roll 1 OR 3) = 1/6 + 1/6 = 2/6
+- P(roll even OR divisible by 3) = ?
+:::
+
+::: {.column width="30%"}
+```{python}
+#| echo: false
+#| fig-height: 4
+#| fig-width: 4
+
+import matplotlib.pyplot as plt
+from matplotlib_venn import venn2
+
+plt.figure(figsize=(4, 4))
+v = venn2(subsets=(3, 2, 1), set_labels=('Even', 'Divisible by 3'))
+v.get_label_by_id('10').set_text('2, 4')
+v.get_label_by_id('01').set_text('3')
+v.get_label_by_id('11').set_text('6')
+plt.title("P(A ∪ B) = 4/6 = 2/3")
+plt.show()
+```
+:::
+
+::: {.column width="30%"}
+```python
+# Simulation approach
+count = 0
+trials = 10000
+
+for _ in range(trials):
+    roll = random.randint(1, 6)
+    if roll % 2 == 0 or roll % 3 == 0:
+        count += 1
+        
+print(f"Probability: {count/trials}")
+```
+
+```
+Probability: 0.6673
+```
+:::
+::::
+
+::: {.notes}
+For "roll even OR divisible by 3":
+- Even numbers: 2, 4, 6
+- Divisible by 3: 3, 6
+- Both: 6
+- P(even OR div by 3) = 3/6 + 2/6 - 1/6 = 4/6 = 2/3 ≈ 0.667
+
+This is a good example where the simulation approach confirms our analytical calculation.
+
+Ask students: When is a simulation approach more practical than analytical?
+:::
+
+## Intersection of Events (AND)
+
+:::: {.columns}
+::: {.column width="40%"}
+For **independent** events:
+$P(A \cap B) = P(A) \cdot P(B)$
+
+**Example:** Drawing cards
+- P(red card) = 26/52 = 1/2
+- P(king) = 4/52 = 1/13
+- P(red king) = ?
+:::
+
+::: {.column width="30%"}
+```{python}
+#| echo: false
+#| fig-height: 4
+#| fig-width: 4
+
+import matplotlib.pyplot as plt
+from matplotlib_venn import venn2
+
+plt.figure(figsize=(4, 4))
+v = venn2(subsets=(24, 2, 2), set_labels=('Red Cards', 'Kings'))
+plt.title("P(A ∩ B) = 2/52 = 1/26")
+plt.show()
+```
+:::
+
+::: {.column width="30%"}
+```python
+# Simulating card draws
+count = 0
+trials = 10000
+
+for _ in range(trials):
+    suit = random.randint(1, 4)  # 1,2=red, 3,4=black
+    rank = random.randint(1, 13)  # 13=king
+    
+    is_red = suit <= 2
+    is_king = rank == 13
+    
+    if is_red and is_king:
+        count += 1
+        
+print(f"P(red king): {count/trials}")
+```
+
+```
+P(red king): 0.0391
+```
+:::
+::::
+
+::: {.notes}
+For "red king":
+- P(red king) = P(red) × P(king) = 1/2 × 1/13 = 1/26 ≈ 0.0385
+
+The simulation approach gives us approximately the same answer. Small differences are due to randomness.
+
+Ask students: When would events in economics NOT be independent?
+:::
+
+# Combinatorics
+
+## What is Combinatorics?
+
+> The mathematical study of counting arrangements and selections
+
+:::: {.columns}
+::: {.column width="60%"}
+**Key Questions:**
+1. Does **order** matter?
+2. Is **replacement** allowed?
+
+**Economic Applications:**
+- Market entry/exit combinations
+- Asset allocation strategies
+- Trading sequence evaluation
+- Game theory outcomes
+:::
+
+::: {.column width="40%"}
+**The Big Four:**
+1. Permutation with replacement
+2. Permutation without replacement
+3. Combination without replacement
+4. Combination with replacement
+:::
+::::
+
+::: {.notes}
+Combinatorics helps us count possible outcomes or arrangements, which is fundamental to probability.
+
+Example in economics: If we have 10 projects and can fund only 3, how many different ways can we allocate funds?
+
+Ask students: Can you think of an economic scenario where the order matters? What about one where it doesn't?
+:::
+
+## Combinatorics Summary
+
+```{mermaid}
+graph TD
+    A[Combinatorial Problem] --> B{Order Matters?}
+    B -->|Yes| C{Replacement Allowed?}
+    B -->|No| D{Replacement Allowed?}
+    
+    C -->|Yes| E[Permutation with Replacement<br>n^k]
+    C -->|No| F[Permutation without Replacement<br>n!/(n-k)!]
+    
+    D -->|Yes| G[Combination with Replacement<br>(n+k-1)!/(k!(n-1)!)]
+    D -->|No| H[Combination without Replacement<br>n!/(k!(n-k)!)]
+    
+    style E fill:#d4f1f9,stroke:#333
+    style F fill:#d4f1f9,stroke:#333  
+    style G fill:#d4f1f9,stroke:#333
+    style H fill:#d4f1f9,stroke:#333
+```
+
+## Permutations with Replacement
+
+:::: {.columns}
+::: {.column width="50%"}
+When **order matters** and **repetition is allowed**:
+
+$n^k$ possible outcomes
+
+where:
+- $n$ = number of choices per position
+- $k$ = number of positions
+
+**Example:** 
+- 4-digit PIN using digits 0-9
+- $10^4 = 10,000$ possibilities
+:::
+
+::: {.column width="50%"}
+```python
+# All possible 2-letter words 
+# from the set {A,B,C,D}
+
+letters = ['A', 'B', 'C', 'D']
+n = len(letters)
+k = 2  # word length
+
+possibilities = n**k
+print(f"Number of possibilities: {possibilities}")
+
+# Show first few possibilities
+words = []
+for i in range(n):
+    for j in range(n):
+        words.append(letters[i] + letters[j])
+print(words[:8])
+```
+
+```
+Number of possibilities: 16
+['AA', 'AB', 'AC', 'AD', 'BA', 'BB', 'BC', 'BD']
+```
+:::
+::::
+
+::: {.notes}
+This applies to many economic scenarios:
+
+- Password combinations
+- Multiple choice options
+- Sequential decision making with repetition allowed
+
+Ask students: How would this change if we couldn't repeat digits in the PIN?
+:::
+
+## Permutations without Replacement
+
+:::: {.columns}
+::: {.column width="50%"}
+When **order matters** and **no repetition**:
+
+$\frac{n!}{(n-k)!}$ arrangements
+
+**Example:** 
+- Ranking top 3 from 8 candidates
+- $\frac{8!}{5!} = 8 \cdot 7 \cdot 6 = 336$ possibilities
+:::
+
+::: {.column width="50%"}
+```python
+def factorial(n):
+    fact = 1
+    for i in range(1, n+1):
+        fact *= i
+    return fact
+
+def permutation(n, k):
+    return factorial(n) // factorial(n-k)
+
+n, k = 8, 3  # 8 swimmers, top 3 places
+perms = permutation(n, k)
+print(f"Number of permutations: {perms}")
+```
+
+```
+Number of permutations: 336
+```
+:::
+::::
+
+::: {.notes}
+This applies to many economic scenarios:
+- Ranking preferences
+- Order of entering markets
+- Executive succession planning
+
+Ask students: If we care about who gets gold, silver, and bronze medals specifically, which counting rule do we use?
+:::
+
+## Combinations without Replacement
+
+:::: {.columns}
+::: {.column width="50%"}
+When **order doesn't matter** and **no repetition**:
+
+$\binom{n}{k} = \frac{n!}{k!(n-k)!}$
+
+**Example:**
+- Selecting 3 projects from 8 options
+- $\binom{8}{3} = \frac{8!}{3!5!} = 56$ possibilities
+:::
+
+::: {.column width="50%"}
+```python
+def combination(n, k):
+    return factorial(n) // (factorial(k) * factorial(n-k))
+
+n, k = 8, 3  # 8 swimmers, 3 medal winners
+combs = combination(n, k)
+print(f"Number of combinations: {combs}")
+
+# Using scipy
+from scipy.special import comb
+print(f"Using scipy: {comb(n, k, exact=True)}")
+```
+
+```
+Number of combinations: 56
+Using scipy: 56
+```
+:::
+::::
+
+::: {.notes}
+This is perhaps the most common scenario in economics:
+- Portfolio selection (which assets to include)
+- Committee formation
+- Market entry decisions (which markets to enter)
+
+The distinction between permutation and combination is critical. Ask students: If we're selecting 3 stocks for a portfolio, do we care about the order we select them?
+:::
+
+## Combinations with Replacement
+
+:::: {.columns}
+::: {.column width="50%"}
+When **order doesn't matter** and **repetition is allowed**:
+
+$\binom{n+k-1}{k} = \frac{(n+k-1)!}{k!(n-1)!}$
+
+**Example:** 
+- Ice cream: 5 flavors, 3 scoops
+- $\binom{5+3-1}{3} = \binom{7}{3} = 35$ possibilities
+:::
+
+::: {.column width="50%"}
+```python
+def combWithReplacement(n, k):
+    return combination(n+k-1, k)
+
+n, k = 5, 3  # 5 flavors, 3 scoops
+combs_r = combWithReplacement(n, k)
+print(f"Combinations with replacement: {combs_r}")
+```
+
+```
+Combinations with replacement: 35
+```
+:::
+::::
+
+::: {.notes}
+This applies to economic scenarios where:
+- Resources can be allocated in any proportion
+- Multiple investments can be made in the same asset
+- Budget allocation across categories
+
+The stars and bars method provides an elegant way to think about this.
+
+Ask students: How would this relate to allocating a budget across different departments?
+:::
+
+## Visualization: Exploring the Ice Cream Problem
+
+```python
+def iceCreamCombos(flavors):
+    combos = {}
+    for i in flavors:
+        for j in flavors:
+            for k in flavors:
+                combo = tuple(sorted([i, j, k]))
+                if combo not in combos:
+                    combos[combo] = 0
+                combos[combo] += 1
+    return len(combos), combos
+
+flavs = {"Vanilla", "Chocolate", "Strawberry", 
+         "Rocky Road", "Cookie Dough"}
+count, _ = iceCreamCombos(flavs)
+print(f"Total combinations: {count}")
+```
+
+```
+Total combinations: 35
+```
+
+::: {.notes}
+This confirms our mathematical calculation! We have 35 different ways to combine 5 flavors into 3 scoops.
+
+The function creates all possible combos of 3 ice cream scoops, sorting each combo to ensure order doesn't matter.
+
+Ask students: How would the calculation change if order did matter? (Ans: 5³ = 125)
+:::
+
+# Monte Carlo Methods
+
+## What is Monte Carlo?
+
+:::: {.columns}
+::: {.column width="60%"}
+**Core concept:** 
+Use random sampling to solve problems
+
+**Key steps:**
+1. Define domain of inputs
+2. Generate random inputs
+3. Perform deterministic computation
+4. Aggregate results
+:::
+
+::: {.column width="40%"}
+**Economic applications:**
+- Risk assessment
+- Option pricing
+- Forecasting
+- Integration
+- Optimization
+:::
+::::
+
+::: {.notes}
+Monte Carlo methods are named after the famous casino in Monaco, reflecting their basis in randomness and probability.
+
+They're extremely powerful in economics because they let us:
+1. Model complex systems with many variables
+2. Account for uncertainty
+3. Estimate probabilities of complex events
+4. Find approximate solutions when exact ones are impossible
+
+Ask students: What kinds of economic problems might be too complex for analytical solutions?
+:::
+
+## Monte Carlo Process
+
+```{mermaid}
+flowchart TD
+    A[Define Problem Domain] -->|Identify parameters| B(Generate Random Inputs)
+    B -->|Sampling from distributions| C(Run Deterministic Calculation)
+    C --> D{Sufficient\nSamples?}
+    D -->|No| B
+    D -->|Yes| E(Aggregate Results)
+    E -->|Statistics, visualization| F[Draw Conclusions]
+    
+    style A fill:#f9d4d4,stroke:#333
+    style B fill:#d4f1f9,stroke:#333
+    style C fill:#d4f1f9,stroke:#333
+    style E fill:#d4f9d4,stroke:#333
+    style F fill:#f9d4d4,stroke:#333
+```
+
+## Classic Example: Estimating π
+
+:::: {.columns}
+::: {.column width="50%"}
+We can estimate π using a circle inscribed in a square:
+
+1. Generate random points in the square
+2. Count points inside the circle
+3. $\pi \approx 4 \times \frac{\text{points in circle}}{\text{total points}}$
+:::
+
+::: {.column width="50%"}
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+points = 10000
+inside = 0
+
+# Generate random points
+x = np.random.random(points)
+y = np.random.random(points)
+
+# Count points in circle
+inside = np.sum((x**2 + y**2) <= 1)
+
+# Calculate pi
+pi_estimate = 4 * inside / points
+print(f"π estimate: {pi_estimate}")
+print(f"True π: {np.pi}")
+```
+
+```
+π estimate: 3.1356
+True π: 3.141592653589793
+```
+:::
+::::
+
+::: {.notes}
+This is a classic example that shows the power of Monte Carlo methods.
+
+The principle applies to many economic problems:
+- Area under a complex demand curve
+- Expected value of a complex asset price distribution
+- Probability of complex market events
+
+Ask students: How would increasing the number of points affect our estimate?
+:::
+
+## Visualizing π Estimation
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Generate points
+np.random.seed(42)
+points = 2000
+x = np.random.random(points)
+y = np.random.random(points)
+inside = (x**2 + y**2) <= 1
+
+# Plotting
+plt.figure(figsize=(5, 5))
+plt.scatter(x[inside], y[inside], s=1, color='blue')
+plt.scatter(x[~inside], y[~inside], s=1, color='red')
+plt.axis('equal')
+circle = plt.Circle((0, 0), 1, fill=False, color='black')
+plt.gca().add_patch(circle)
+plt.xlim(0, 1)
+plt.ylim(0, 1)
+
+# Calculate pi
+pi_estimate = 4 * np.sum(inside) / points
+plt.title(f"π estimate: {pi_estimate:.4f}")
+plt.show()
+```
+
+::: {.notes}
+The visualization helps understand what's happening:
+- Blue points are inside the circle (x² + y² ≤ 1)
+- Red points are outside
+- The ratio of blue points to total points is approximately π/4
+
+This shows a key strength of Monte Carlo: we're using randomness to solve a deterministic problem.
+
+Ask students: Can you think of other geometric problems we could solve with this approach?
+:::
+
+## Gambler's Ruin Problem
+
+:::: {.columns}
+::: {.column width="50%"}
+**Problem:**
+- Start with $6
+- Goal: Double your money to $12
+- Each bet: lose $1 or win $2
+- Win if die roll > 3
+
+**Questions:**
+- What's the probability of reaching $12?
+- How many bets on average?
+:::
+
+::: {.column width="50%"}
+```python
+def gamblers_ruin(initial_money, target_money):
+  current_money = initial_money
+  bets = 0
+  while current_money > 0 and current_money < target_money:
+    # place bet
+    current_money -= 1
+    bets += 1
+
+    # roll die
+    die = random.randint(1,6)
+
+    # add winnings
+    if die > 3:
+      current_money += 2
+
+  return current_money, bets
+
+initial_money = 6
+target_money = 12
+```
+:::
+::::
+
+::: {.notes}
+This is a classic probability problem that's difficult to solve analytically but perfect for Monte Carlo.
+
+It models many economic scenarios:
+- Investment strategies with fixed targets
+- Trading with limited capital
+- Risk of bankruptcy
+- Business survival analysis
+
+Ask students: What factors affect the probability of success in this scenario?
+:::
+
+## Simulating Gambler's Ruin
+
+```python
+# Run many simulations
+num_simulations = 10000
+results = [gamblers_ruin(initial_money, target_money) 
+           for _ in range(num_simulations)]
+
+# Calculate probability of success
+success = sum([1 for r in results if r[0] >= target_money])
+prob_success = success / num_simulations
+
+# Calculate average number of bets
+avg_bets = sum([r[1] for r in results]) / num_simulations
+
+print(f"Probability of reaching ${target_money}: {prob_success:.4f}")
+print(f"Average number of bets: {avg_bets:.1f}")
+```
+
+```
+Probability of reaching $12: 0.5019
+Average number of bets: 36.2
+```
+
+::: {.notes}
+The results show:
+1. About a 50% chance of success
+2. It takes about 36 bets on average
+
+This is despite having a positive expected value per bet:
+- With probability 1/2, win $1
+- With probability 1/2, lose $1
+- Expected value per bet: 0.5 × $1 + 0.5 × (-$1) = $0
+
+The possibility of going broke before reaching the target makes a huge difference.
+
+Ask students: How would this change if we started with $3 instead of $6?
+:::
+
+## Distribution of Results
+
+```{python}
+import random
+import numpy as np
+import matplotlib.pyplot as plt
+
+def gamblers_ruin(initial_money, target_money):
+  current_money = initial_money
+  bets = 0
+  while current_money > 0 and current_money < target_money:
+    current_money -= 1
+    bets += 1
+    die = random.randint(1,6)
+    if die > 3:
+      current_money += 2
+  return current_money, bets
+
+initial_money = 6
+target_money = 12
+num_simulations = 10000
+np.random.seed(42)
+random.seed(42)
+results = [gamblers_ruin(initial_money, target_money) 
+           for _ in range(num_simulations)]
+
+# Plot histogram of number of bets
+plt.figure(figsize=(10, 4))
+plt.subplot(1, 2, 1)
+plt.hist([r[1] for r in results], bins=30, color='skyblue')
+plt.title('Number of Bets')
+plt.xlabel('Bets')
+plt.ylabel('Frequency')
+
+# Plot histogram of final money
+plt.subplot(1, 2, 2)
+plt.hist([r[0] for r in results], bins=[0,1,12], color='lightgreen')
+plt.title('Final Money')
+plt.xlabel('Money')
+plt.ylabel('Frequency')
+plt.tight_layout()
+plt.show()
+```
+
+::: {.notes}
+The histograms reveal:
+
+1. Left: The number of bets has a right-skewed distribution, with some games lasting much longer than average
+2. Right: The binary outcome - either success ($12) or failure ($0)
+
+This is much richer information than just knowing the average. Monte Carlo gives us the full distribution.
+
+Ask students: What economic insights can we draw from the shape of these distributions?
+:::
+
+## Economic Applications
+
+:::: {.columns}
+::: {.column width="50%"}
+**Option Pricing:**
+```python
+# Monte Carlo option pricing
+import numpy as np
+
+S0 = 100    # Initial stock price
+K = 100     # Strike price
+r = 0.05    # Risk-free rate
+sigma = 0.2 # Volatility
+T = 1       # Time to maturity
+n = 10000   # Number of simulations
+
+# Simulate stock prices
+z = np.random.standard_normal(n)
+ST = S0*np.exp((r-0.5*sigma**2)*T 
+              + sigma*np.sqrt(T)*z)
+
+# Calculate payoffs for call option
+payoffs = np.maximum(ST-K, 0)
+price = np.exp(-r*T) * np.mean(payoffs)
+print(f"Call option price: ${price:.2f}")
+```
+:::
+
+::: {.column width="50%"}
+**Risk Assessment:**
+```python
+# Value at Risk calculation
+import numpy as np
+
+# Portfolio parameters
+initial_value = 1000000  # $1M portfolio
+mean_return = 0.08       # 8% expected return
+volatility = 0.15        # 15% volatility
+horizon = 1/52           # 1 week
+confidence = 0.95        # 95% confidence
+simulations = 100000
+
+# Simulate returns
+r = np.random.normal(
+    mean_return*horizon, 
+    volatility*np.sqrt(horizon), 
+    simulations)
+
+# Calculate portfolio values
+values = initial_value * (1 + r)
+
+# Calculate VaR
+VaR = initial_value - np.percentile(values, 
+                       100*(1-confidence))
+print(f"95% weekly VaR: ${VaR:.2f}")
+```
+:::
+::::
+
+::: {.notes}
+These are just two of many applications in economics and finance:
+
+Option Pricing:
+- The Black-Scholes model provides an analytical solution for simple options
+- Monte Carlo is essential for path-dependent or exotic options
+
+Risk Assessment:
+- Value at Risk (VaR) is a key risk measure in financial institutions
+- Monte Carlo allows us to estimate VaR for complex portfolios
+
+Ask students: What other economic problems might benefit from Monte Carlo methods?
+:::
+
+## Key Takeaways
+
+:::: {.columns}
+::: {.column width="50%"}
+**Core concepts:**
+- Numpy provides efficient computation
+- Probability is the foundation of uncertainty
+- Combinatorics helps us count outcomes
+- Monte Carlo uses randomness to solve problems
+:::
+
+::: {.column width="50%"}
+**Economic value:**
+- Model complex systems
+- Incorporate uncertainty
+- Estimate distributions
+- Optimize under constraints
+- Forecast with confidence intervals
+:::
+::::
+
+**Next steps:** Apply these tools to build economic models of increasing complexity.
+
+::: {.notes}
+These computational tools form the foundation for modern quantitative economics.
+
+They allow us to:
+1. Move beyond simplified analytical models
+2. Incorporate more realistic assumptions
+3. Handle uncertainty explicitly
+4. Solve problems that have no closed-form solutions
+
+The real power comes when we combine these tools with economic theory to answer questions that matter.
+
+Final question for students: Which of these tools are you most excited to apply to your own research or interests?
+::: 
